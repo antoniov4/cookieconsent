@@ -57,7 +57,7 @@ CookieConsent.run({
         translations: {
             en: {
                 consentModal: {
-                    title: 'Hello traveller, it\'s cookie time!',
+                    title: 'Hello developer, it\'s cookie time!',
                     description: 'Our website uses tracking cookies to understand how you interact with it. The tracking will be enabled only if you accept explicitly. <a href="#privacy-policy" data-cc="show-preferencesModal" class="cc__link">Manage preferences</a>',
                     acceptAllBtn: 'Accept all',
                     acceptNecessaryBtn: 'Reject all',
