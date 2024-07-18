@@ -8,7 +8,7 @@ import { globalObj } from '../global';
  * @param {import("../global").Api} api
  * @param {CreateMainContainer} createMainContainer
  */
-export const createMyModal = (api, createMainContainer) => {
+export const createMyModal = async (api, createMainContainer) => {
     const state =  globalObj._state;
     const dom = globalObj._dom;
 
@@ -91,10 +91,60 @@ export const createMyModal = (api, createMainContainer) => {
         dom._mmTitle.innerHTML = titleData;
     }
 
-    // Set description
-    if (description) {
-        dom._mmBody.innerHTML = description;
-    }
+    //Add a loading message
+    const loadingMessage = createNode('p');
+    addClass(loadingMessage, 'loading-message');
+    loadingMessage.innerHTML = 'Loading...';
+    appendChild(dom._mmBody, loadingMessage);
+
+
+    //Fetch data
+    const request1 = fetch('https://669990df2069c438cd729c13.mockapi.io/api/test1/randomNames');
+    const request2 = fetch('https://669990df2069c438cd729c13.mockapi.io/api/test1/endpoint1');
+    
+
+
+    Promise.all([request1, request2])
+        .then(responses => Promise.all(responses.map(res => res.json())))
+        .then(([data1, data2]) => {
+            console.log(data1, data2);
+            //Remove loading message
+            dom._mmBody.removeChild(loadingMessage);
+
+            //Add data to modal
+
+            const title1 = createNode('h3');
+            title1.innerHTML = 'Data Names';
+            appendChild(dom._mmBody, title1);
+
+            const data1Element = createNode('div');
+            data1Element.innerHTML = JSON.stringify(data1);
+            appendChild(dom._mmBody, data1Element);
+
+            const title2 = createNode('h3');
+            title2.innerHTML = 'Data Random Strings';
+            appendChild(dom._mmBody, title2);
+
+            const data2Element = createNode('div');
+            data2Element.innerHTML = JSON.stringify(data2);
+            appendChild(dom._mmBody, data2Element);
+
+
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
+    fetch('/test',{method:'get'}).then(async(response) => {
+        console.log('HELLOO',response);
+    
+        //push html response to modal
+        const htmlResponse = createNode('div');
+        htmlResponse.innerHTML = await response.text();
+        appendChild(dom._mmBody, htmlResponse);
+            
+    });
+
 
     
     if (dom._mmNewBody) {

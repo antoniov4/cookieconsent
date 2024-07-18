@@ -233,18 +233,13 @@ export const createConsentModal = (api, createMainContainer) => {
         addClassCm(dom._cmMyBtn, 'btn--secondary');
         setAttribute(dom._cmMyBtn, DATA_ROLE, 'my-custom-btn');
 
-        addEvent(dom._cmMyBtn, 'mouseenter', () => {
-            console.log('Will create custom modal2');
-
-            console.log('State:', state);
-
+        addEvent(dom._cmMyBtn, CLICK_EVENT, () => {
             if (!state._myModalExists){
                 console.log('Creating custom modal');
                 createMyModal(api, createMainContainer);
-
             }
+            showMyModal();
         });
-        addEvent(dom._cmMyBtn, CLICK_EVENT, showMyModal);
             
         dom._cmMyBtn.firstElementChild.innerHTML = myBtnData;
     }
