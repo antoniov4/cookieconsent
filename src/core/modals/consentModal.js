@@ -68,7 +68,8 @@ export const createConsentModal = (api, createMainContainer) => {
         closeIconLabelData = consentModalData.closeIconLabel,
         footerData = consentModalData.footer,
         consentModalLabelValue = consentModalData.label,
-        consentModalTitleValue = consentModalData.title;
+        consentModalTitleValue = consentModalData.title,
+        customBtnData = 'Open a new modal';
 
     /**
      * @param {string|string[]} [categories]
@@ -222,6 +223,28 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmShowPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtnData;
     }
 
+    if(customBtnData){
+        console.log('Custom button data:', customBtnData);
+        dom._cmCustomBtn = createNode(BUTTON_TAG);
+        appendChild(dom._cmCustomBtn, createFocusSpan());
+
+        addClassCm(dom._cmCustomBtn, 'btn');
+        addClassCm(dom._cmCustomBtn, 'btn--secondary');
+        setAttribute(dom._cmCustomBtn, DATA_ROLE, 'custom');
+    
+        console.log('dom._cmCustomBtn:', dom._cmCustomBtn);
+
+        addEvent(dom._cmCustomBtn, 'mouseenter', () => {
+            console.log('Will create custom modal');
+        });
+        addEvent(dom._cmCustomBtn, CLICK_EVENT, ()=>{
+            console.log('Custom button clicked');
+            
+        });
+            
+        dom._cmCustomBtn.firstElementChild.innerHTML = customBtnData;
+    }
+
     if (!dom._cmBtnGroup) {
         dom._cmBtnGroup = createNode(DIV_TAG);
         addClassCm(dom._cmBtnGroup, BTN_GROUP_CLASS);
@@ -245,6 +268,14 @@ export const createConsentModal = (api, createMainContainer) => {
             appendChild(dom._cmBtns, dom._cmBtnGroup2);
         }
     }
+
+    if(dom._cmCustomBtn && !dom._cmBtnGroup3){
+        dom._cmBtnGroup3 = createNode(DIV_TAG);
+        addClassCm(dom._cmBtnGroup3, BTN_GROUP_CLASS);
+        appendChild(dom._cmBtnGroup3, dom._cmCustomBtn);
+        appendChild(dom._cmBtns, dom._cmBtnGroup3);
+    }
+
 
     if (footerData) {
         if (!dom._cmFooterLinksGroup) {
