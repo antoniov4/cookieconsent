@@ -564,6 +564,16 @@ declare namespace CookieConsent {
      * Hide the preferencesModal.
      */
     function hidePreferences(): void
+    
+    /**
+     * Show the custom modal myModal.
+     */
+    function showMyModal(): void
+
+    /**
+     * Hide the myModal.
+     */
+    function hideMyModal(): void
 
     /**
      * Accept/Reject categories.

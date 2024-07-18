@@ -868,7 +868,7 @@ export const getFocusableElements = (root) => querySelectorAll(root, focusableTy
 /**
  * Save reference to first and last focusable elements inside each modal
  * to prevent losing focus while navigating with TAB
- * @param {1 | 2} [modalId]
+ * @param {1 | 2 | 3} [modalId]
  */
 export const getModalFocusableData = (modalId) => {
     const { _state, _dom } = globalObj;
@@ -893,6 +893,9 @@ export const getModalFocusableData = (modalId) => {
 
     if (modalId === 2 && _state._preferencesModalExists)
         saveAllFocusableElements(_dom._pm, _state._pmFocusableElements);
+
+    if (modalId ===3 && _state._myModalExists)
+        saveAllFocusableElements(_dom._mm, _state._mmFocusableElements);
 };
 
 /**
