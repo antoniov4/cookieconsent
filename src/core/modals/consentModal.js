@@ -69,7 +69,7 @@ export const createConsentModal = (api, createMainContainer) => {
         footerData = consentModalData.footer,
         consentModalLabelValue = consentModalData.label,
         consentModalTitleValue = consentModalData.title,
-        customBtnData = 'Open a new modal';
+        myBtnData = 'Open a new modal';
 
     /**
      * @param {string|string[]} [categories]
@@ -223,26 +223,24 @@ export const createConsentModal = (api, createMainContainer) => {
         dom._cmShowPreferencesBtn.firstElementChild.innerHTML = showPreferencesBtnData;
     }
 
-    if(customBtnData){
-        console.log('Custom button data:', customBtnData);
-        dom._cmCustomBtn = createNode(BUTTON_TAG);
-        appendChild(dom._cmCustomBtn, createFocusSpan());
+    if(myBtnData){
+        console.log('my button data:', myBtnData);
+        dom._cmMyBtn = createNode(BUTTON_TAG);
+        appendChild(dom._cmMyBtn, createFocusSpan());
 
-        addClassCm(dom._cmCustomBtn, 'btn');
-        addClassCm(dom._cmCustomBtn, 'btn--secondary');
-        setAttribute(dom._cmCustomBtn, DATA_ROLE, 'custom');
-    
-        console.log('dom._cmCustomBtn:', dom._cmCustomBtn);
+        addClassCm(dom._cmMyBtn, 'btn');
+        addClassCm(dom._cmMyBtn, 'btn--secondary');
+        setAttribute(dom._cmMyBtn, DATA_ROLE, 'my-custom-btn');
 
-        addEvent(dom._cmCustomBtn, 'mouseenter', () => {
+        addEvent(dom._cmMyBtn, 'mouseenter', () => {
             console.log('Will create custom modal');
         });
-        addEvent(dom._cmCustomBtn, CLICK_EVENT, ()=>{
+        addEvent(dom._cmMyBtn, CLICK_EVENT, ()=>{
             console.log('Custom button clicked');
             
         });
             
-        dom._cmCustomBtn.firstElementChild.innerHTML = customBtnData;
+        dom._cmMyBtn.firstElementChild.innerHTML = myBtnData;
     }
 
     if (!dom._cmBtnGroup) {
@@ -269,10 +267,10 @@ export const createConsentModal = (api, createMainContainer) => {
         }
     }
 
-    if(dom._cmCustomBtn && !dom._cmBtnGroup3){
+    if(dom._cmMyBtn && !dom._cmBtnGroup3){
         dom._cmBtnGroup3 = createNode(DIV_TAG);
         addClassCm(dom._cmBtnGroup3, BTN_GROUP_CLASS);
-        appendChild(dom._cmBtnGroup3, dom._cmCustomBtn);
+        appendChild(dom._cmBtnGroup3, dom._cmMyBtn);
         appendChild(dom._cmBtns, dom._cmBtnGroup3);
     }
 
