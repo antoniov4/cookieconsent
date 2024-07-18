@@ -1,6 +1,7 @@
-import { DIV_TAG } from "../../utils/constants";
-import { addClass, appendChild, debug, fireEvent, getModalFocusableData, handleFocusTrap } from "../../utils/general";
-import { guiManager } from "../../utils/gui-manager";
+import { ARIA_HIDDEN, BUTTON_TAG, CLICK_EVENT, DIV_TAG } from '../../utils/constants';
+import { addClass, addClassPm, addEvent, appendChild, createNode, debug, fireEvent, getModalFocusableData, getSvgIcon, handleFocusTrap, setAttribute } from '../../utils/general';
+import { guiManager } from '../../utils/gui-manager';
+import { globalObj } from '../global';
 
 /**
  * Generates custom modal and appends it to "cc-main" el.
@@ -8,19 +9,19 @@ import { guiManager } from "../../utils/gui-manager";
  * @param {CreateMainContainer} createMainContainer
  */
 export const createMyModal = (api, createMainContainer) => {
-    console.log('createCustomModal');
     const state =  globalObj._state;
     const dom = globalObj._dom;
 
-    const {hide, hideMyModal, showMyModal} = api;
+    const { hideMyModal} = api;
 
-    const titleData = "My Modal",
-        closeIconLabel = "Close"
+    const titleData = 'My Modal',
+        closeIconLabel = 'Close',
         description = 'This is a custom modal.';
 
     if(!dom._mmContainer) {
-        dom._mmContainer = createNode(DIV_TAG)
-        addClass(dom._mmContainer, "pm-wrapper");
+        dom._mmContainer = createNode(DIV_TAG);
+        addClass(dom._mmContainer, 'mm-wrapper');
+
         
         const mmOverlay = createNode('div');
         addClass(mmOverlay, 'pm-overlay');
@@ -29,12 +30,12 @@ export const createMyModal = (api, createMainContainer) => {
         /**
          * Hide modal when overlay is clicked
         */
-       addEvent(mmOverlay, CLICK_EVENT, hideMyModal);
+        addEvent(mmOverlay, CLICK_EVENT, hideMyModal);
      
 
-       //My modal
+        //My modal
 
-       dom._mm = createNode(DIV_TAG);
+        dom._mm = createNode(DIV_TAG);
 
         addClass(dom._mm, 'pm');
         setAttribute(dom._mm, 'role', 'dialog');
@@ -74,7 +75,7 @@ export const createMyModal = (api, createMainContainer) => {
 
         // Create body
         dom._mmBody = createNode(DIV_TAG);
-        addClassPm(dom._pmBody, 'body');
+        addClassPm(dom._mmBody, 'body');
 
         appendChild(dom._mm, dom._mmHeader);
         appendChild(dom._mm, dom._mmBody);
@@ -108,16 +109,11 @@ export const createMyModal = (api, createMainContainer) => {
 
         debug('CookieConsent [HTML] created', 'my-modal');
 
-        //fireEvent(globalObj._customEvents._onModalReady, 'my-modal', dom._mm);
+        fireEvent(globalObj._customEvents._onModalReady, 'my-modal', dom._mm);
         createMainContainer(api);
         appendChild(dom._ccMain, dom._mmContainer);
-       //handleFocusTrap(dom._mm);
-
-        /**
-         * Enable transition
-         */
+       
         setTimeout(() => addClass(dom._mmContainer, 'cc--anim'), 100);
     }
 
-    getModalFocusableData(3);
 };

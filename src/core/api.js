@@ -68,9 +68,12 @@ import {
     OPT_OUT_MODE,
     CONSENT_MODAL_NAME,
     ARIA_HIDDEN,
-    PREFERENCES_MODAL_NAME
+    PREFERENCES_MODAL_NAME,
+    CUSTOM_MODAL_NAME,
+    TOGGLE_MY_MODAL_CLASS
 } from '../utils/constants';
 import { localStorageManager } from '../utils/localstorage';
+import { createMyModal } from './modals/myModal';
 
 /**
  * Accept API
@@ -289,6 +292,37 @@ export const showPreferences = () => {
 };
 
 /**
+ * Show custom modal
+ */
+export const showMyModal = () => {
+    console.log('showCustom');
+    const state = globalObj._state;
+
+    console.log(state._myModalVisible);
+
+    if (state._myModalVisible)
+        return;
+
+    if (!state._myModalExists){
+        console.log('createMyModal');
+        createMyModal(miniAPI, createMainContainer);
+
+    }
+
+    state._myModalVisible = true;
+
+
+    addClass(globalObj._dom._htmlDom, TOGGLE_MY_MODAL_CLASS);
+    setAttribute(globalObj._dom._mm, ARIA_HIDDEN, 'false');
+
+    debug('CookieConsent [TOGGLE]: show MyModal');
+
+    fireEvent(globalObj._customEvents._onModalShow, 'my-modal');
+};
+
+
+
+/**
  * https://github.com/orestbida/cookieconsent/issues/481
  */
 const discardUnsavedPreferences = () => {
@@ -359,12 +393,47 @@ export const hidePreferences = () => {
     fireEvent(globalObj._customEvents._onModalHide, PREFERENCES_MODAL_NAME);
 };
 
+/**
+ * Hide my modal
+ */
+export const hideMyModal = () => {
+    const state = globalObj._state;
+
+    if (!state._myModalVisible)
+        return;
+
+    state._myModalVisible = false;
+
+
+    removeClass(globalObj._dom._htmlDom, TOGGLE_MY_MODAL_CLASS);
+    setAttribute(globalObj._dom._mm, ARIA_HIDDEN, 'true');
+
+    /**
+     * If consent modal is visible, focus him (instead of page document)
+     */
+    if (state._consentModalVisible) {
+        focus(state._lastFocusedModalElement);
+        state._lastFocusedModalElement = null;
+    } else {
+        /**
+         * Restore focus to last page element which had focus before modal opening
+         */
+        focus(state._lastFocusedElemBeforeModal);
+        state._lastFocusedElemBeforeModal = null;
+    }
+
+    debug('CookieConsent [TOGGLE]: hide preferencesModal');
+
+};
+
 var miniAPI = {
     show,
     hide,
     showPreferences,
     hidePreferences,
-    acceptCategory
+    acceptCategory,
+    showMyModal,
+    hideMyModal
 };
 
 /**

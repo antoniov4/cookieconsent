@@ -27,6 +27,7 @@ import {
 
 import { guiManager } from '../../utils/gui-manager';
 import { createPreferencesModal } from './preferencesModal';
+import { createMyModal } from './myModal';
 
 /**
  * @callback CreateMainContainer
@@ -52,7 +53,7 @@ const createFocusSpan = () => {
 export const createConsentModal = (api, createMainContainer) => {
     const state = globalObj._state;
     const dom = globalObj._dom;
-    const {hide, showPreferences, acceptCategory} = api;
+    const {hide, showPreferences, acceptCategory, showMyModal } = api;
 
     /**
      * @type {import("../global").ConsentModalOptions}
@@ -233,12 +234,17 @@ export const createConsentModal = (api, createMainContainer) => {
         setAttribute(dom._cmMyBtn, DATA_ROLE, 'my-custom-btn');
 
         addEvent(dom._cmMyBtn, 'mouseenter', () => {
-            console.log('Will create custom modal');
+            console.log('Will create custom modal2');
+
+            console.log('State:', state);
+
+            if (!state._myModalExists){
+                console.log('Creating custom modal');
+                createMyModal(api, createMainContainer);
+
+            }
         });
-        addEvent(dom._cmMyBtn, CLICK_EVENT, ()=>{
-            console.log('Custom button clicked');
-            
-        });
+        addEvent(dom._cmMyBtn, CLICK_EVENT, showMyModal);
             
         dom._cmMyBtn.firstElementChild.innerHTML = myBtnData;
     }
