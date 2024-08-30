@@ -1,6 +1,6 @@
 {
     "name": "@antoniov4/vanilla-cookieconsent",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "description": "🍪 Simple cross-browser cookie-consent plugin written in vanilla js. Forked by antoniov4",
     "main": "dist/cookieconsent.umd.js",
     "module": "dist/cookieconsent.esm.js",
