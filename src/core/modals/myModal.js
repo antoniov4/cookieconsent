@@ -2,6 +2,7 @@ import { ARIA_HIDDEN, BUTTON_TAG, CLICK_EVENT, DIV_TAG } from '../../utils/const
 import { addClass, addClassPm, addEvent, appendChild, createNode, debug, fireEvent, getModalFocusableData, getSvgIcon, handleFocusTrap, setAttribute } from '../../utils/general';
 import { guiManager } from '../../utils/gui-manager';
 import { globalObj } from '../global';
+import QRCode from 'qrcode';
 
 /**
  * Generates custom modal and appends it to "cc-main" el.
@@ -14,7 +15,7 @@ export const createMyModal = async (api, createMainContainer) => {
 
     const { hideMyModal} = api;
 
-    const titleData = 'My Modal',
+    const titleData = 'Manage Cookies with BTS',
         closeIconLabel = 'Close',
         description = 'This is a custom modal.';
 
@@ -111,40 +112,18 @@ export const createMyModal = async (api, createMainContainer) => {
             //Remove loading message
             dom._mmBody.removeChild(loadingMessage);
 
-            //Add data to modal
-
-            const title1 = createNode('h3');
-            title1.innerHTML = 'Data Names';
-            appendChild(dom._mmBody, title1);
-
-            const data1Element = createNode('div');
-            data1Element.innerHTML = JSON.stringify(data1);
-            appendChild(dom._mmBody, data1Element);
-
-            const title2 = createNode('h3');
-            title2.innerHTML = 'Data Random Strings';
-            appendChild(dom._mmBody, title2);
-
-            const data2Element = createNode('div');
-            data2Element.innerHTML = JSON.stringify(data2);
-            appendChild(dom._mmBody, data2Element);
-
+            //Add QR code
+            const qrCode = createNode('canvas');
+            //add class qr-code
+            qrCode.classList.add('qr-code');
+            qrCode.id = 'qrcode';
+            appendChild(dom._mmBody, qrCode);
+            QRCode.toCanvas(qrCode, JSON.stringify({'names':data1,'strings':data2}), { width: 350 });
 
         })
         .catch(error => {
             console.error(error);
         });
-
-    fetch('/test',{method:'get'}).then(async(response) => {
-        console.log('HELLOO',response);
-    
-        //push html response to modal
-        const htmlResponse = createNode('div');
-        htmlResponse.innerHTML = await response.text();
-        appendChild(dom._mmBody, htmlResponse);
-            
-    });
-
 
     
     if (dom._mmNewBody) {
